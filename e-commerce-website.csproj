@@ -36,9 +36,4 @@
     <None Include="C:\Users\Administrator\Desktop\GitHub\e-commerce-website\.editorconfig" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Helper\Evaluation\" />
-    <Folder Include="Helper\Product\" />
-  </ItemGroup>
-
 </Project>

@@ -3,15 +3,17 @@ using e_commerce_website.Helper.Chat;
 using e_commerce_website.Models;
 using e_commerce_website.Services.Interfaces;
 using e_commerce_website.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using System;
 
 namespace e_commerce_website.Hubs
 {
+    [Authorize]
     public class ChatHub : Hub
     {
-        private Guid adminId = new Guid("4557893f-1f56-4b6f-bb3b-caefd62c8c49");
+        private Guid adminId = new Guid("4557893F-1F56-4B6F-BB3B-CAEFD62C8C49");
         private readonly static ConnectionMapping<Guid> _connections = new ConnectionMapping<Guid>();
         private readonly IOrderService _orderService;
 

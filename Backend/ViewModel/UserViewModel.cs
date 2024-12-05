@@ -10,7 +10,7 @@ namespace e_commerce_website.ViewModel
         public string email { get; set; }
         public string phone { get; set; }
         public string address { get; set; }
-        public string avatar { get; set; }
+        public string? avatar { get; set; }
         public bool gender { get; set; }
         public DateTime birthDay { get; set; }
         public ActionStatus status { get; set; }

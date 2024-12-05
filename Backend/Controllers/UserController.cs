@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace e_commerce_website.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {

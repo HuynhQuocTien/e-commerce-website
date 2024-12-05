@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace e_commerce_website.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ManageProductController : ControllerBase
     {
@@ -17,44 +17,12 @@ namespace e_commerce_website.Controllers
         {
             _manageProductService = manageProductService;
         }
-        //// GET: api/<ManageProductController>
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        //// GET api/<ManageProductController>/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        //// POST api/<ManageProductController>
-        //[HttpPost]
-        //public void Post([FromBody] string value)
-        //{
-        //}
-
-        //// PUT api/<ManageProductController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        //// DELETE api/<ManageProductController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
         [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<List<ProductViewModel>> getAll()
-
+        [Authorize(Policy  = "Admin")]
+        public async Task<IActionResult> getAll()
         {
             var data = await _manageProductService.GetAll();
-            return data;
+            return Ok(data);
         }
         [HttpGet("getProductById")]
         [Authorize(Roles = "Admin")]

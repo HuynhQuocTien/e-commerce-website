@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using MimeKit;
+using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -19,21 +20,27 @@ namespace e_commerce_website.Services
 {
     public class UserService : IUserService
     {
-        private readonly ShopDbContext _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly IConfiguration _config;
         private readonly RoleManager<AppRole> _roleManager;
+        private readonly IConfiguration _config;
+        private readonly ShopDbContext _context;
         private readonly IStorageService _storageService;
         private readonly EmailConfiguration _emailConfiguration;
-        public UserService(ShopDbContext context,
-            UserManager<AppUser> userManager,
-            SignInManager<AppUser> signInManager,
-            IConfiguration config) {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
+            RoleManager<AppRole> roleManager, IConfiguration config,
+            ShopDbContext context, IStorageService storageService,
+            EmailConfiguration emailConfiguration, IHttpContextAccessor httpContextAccessor)
+        {
             _userManager = userManager;
-            _context = context;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _config = config;
+            _context = context;
+            _storageService = storageService;
+            _emailConfiguration = emailConfiguration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<string> Authenticate(LoginRequest request)
@@ -114,30 +121,64 @@ namespace e_commerce_website.Services
         {
             var findUser = await _context.Users.Include(or => or.Orders)
             .FirstOrDefaultAsync(p => p.Id == request.id);
-            if ((findUser.avatar == request.avatar) && request.file == null)
+            if (findUser == null)
             {
-                findUser.displayname = request.displayname;
-                findUser.gender = request.gender;
-                findUser.phone = request.phone;
-                findUser.address = request.address;
-                findUser.birthDay = request.birthDay;
-                _context.Entry(findUser).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-                return findUser.Id;
+                // If user not found, throw an exception or return a meaningful result.
+                throw new ArgumentException("User not found.");
             }
-            else
-            {
 
-                findUser.avatar = await this.SaveFile(request.file);
-                findUser.displayname = request.displayname;
-                findUser.gender = request.gender;
-                findUser.address = request.address;
-                findUser.phone = request.phone;
-                findUser.birthDay = request.birthDay;
-                _context.Entry(findUser).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-                return findUser.Id;
+            // Step 2: Update user details (non-avatar related)
+            findUser.displayname = request.displayname;
+            findUser.gender = request.gender;
+            findUser.phone = request.phone;
+            findUser.address = request.address;
+            findUser.birthDay = request.birthDay;
+            // Handle avatar update
+            if (!string.IsNullOrEmpty(request.avatar) && request.file == null)
+            {
+                // Use the existing avatar
+                findUser.avatar = request.avatar;
             }
+            else if (request.file != null)
+            {
+                // Save the new file and update avatar
+                findUser.avatar = await this.SaveFile(request.file);
+            }
+            else if (string.IsNullOrEmpty(request.avatar) && request.file == null)
+            {
+                // Optional: You can decide whether to throw an error or use a default avatar
+                throw new ArgumentException("Both avatar and file are missing. Please provide at least one.");
+            }
+
+            // Step 4: Save the changes to the database
+            _context.Entry(findUser).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            // if ((findUser.avatar == request.avatar) && request.file == null)
+            // {
+            //     findUser.displayname = request.displayname;
+            //     findUser.gender = request.gender;
+            //     findUser.phone = request.phone;
+            //     findUser.address = request.address;
+            //     findUser.birthDay = request.birthDay;
+            //     _context.Entry(findUser).State = EntityState.Modified;
+            //     await _context.SaveChangesAsync();
+            //     return findUser.Id;
+            // }
+            // else
+            // {
+            //
+            //     findUser.avatar = await this.SaveFile(request.file);
+            //     findUser.displayname = request.displayname;
+            //     findUser.gender = request.gender;
+            //     findUser.address = request.address;
+            //     findUser.phone = request.phone;
+            //     findUser.birthDay = request.birthDay;
+            //     _context.Entry(findUser).State = EntityState.Modified;
+            //     await _context.SaveChangesAsync();
+            //     return findUser.Id;
+            // }
+            return findUser.Id;
         }
         public async Task<string> SaveFile(IFormFile file)
         {

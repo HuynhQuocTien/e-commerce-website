@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace e_commerce_website.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ManageUserController : ControllerBase
     {
@@ -15,37 +15,6 @@ namespace e_commerce_website.Controllers
         {
             _manageUserService = manageUserService;
         }
-        //// GET: api/<ManageUserController>
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        //// GET api/<ManageUserController>/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        //// POST api/<ManageUserController>
-        //[HttpPost]
-        //public void Post([FromBody] string value)
-        //{
-        //}
-
-        //// PUT api/<ManageUserController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        //// DELETE api/<ManageUserController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
         [HttpGet("GetUserDisplayList")]
         public async Task<IActionResult> GetUserDisplayList()
         {

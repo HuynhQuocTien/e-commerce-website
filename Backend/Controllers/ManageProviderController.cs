@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace e_commerce_website.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "Admin")]
     public class ManageProviderController : ControllerBase
@@ -18,37 +18,6 @@ namespace e_commerce_website.Controllers
         {
             _manageProviderService = manageProviderService;
         }
-        //// GET: api/<ManageProviderController>
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        //// GET api/<ManageProviderController>/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        //// POST api/<ManageProviderController>
-        //[HttpPost]
-        //public void Post([FromBody] string value)
-        //{
-        //}
-
-        //// PUT api/<ManageProviderController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        //// DELETE api/<ManageProviderController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
         [HttpGet]
         public async Task<List<ProviderViewModel>> getAll()
         {

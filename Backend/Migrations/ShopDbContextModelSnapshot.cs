@@ -237,7 +237,6 @@ namespace e_commerce_website.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("avatar")
@@ -276,13 +275,13 @@ namespace e_commerce_website.Migrations
                         {
                             Id = new Guid("4557893f-1f56-4b6f-bb3b-caefd62c8c49"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "abc18d67-70fe-4050-9a38-261a3579015c",
+                            ConcurrencyStamp = "ac4c15e7-3ffd-4d1e-a821-1910531b11ad",
                             Email = "huynhquoctien01062003@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "HUYNHQUOCTIEN01062003@GMAIL.COM",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFxrS0eF13pXYRqecvfwaNKGuNKn1euDQ5KLSP+iXoktQ8B6WGLMMUi48+zBIqGaSg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPS/eYTYfr9Wua7pk17lFECrLrIZUPuSq9dV0U9SN3AuPgYPrHYCNOBLO5CVPuTuIA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,

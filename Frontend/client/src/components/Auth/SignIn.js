@@ -36,7 +36,8 @@ function getBase64(img, callback) {
         }
         else{
             
-            const body = {                
+            const body = {
+                
                 name: response.name,
                 email: response.email,
                 avatar: !!response.picture ? response.picture.data.url : null,

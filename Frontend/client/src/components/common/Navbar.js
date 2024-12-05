@@ -4,7 +4,7 @@ import {FaAlignRight, FaUserAlt, FaShoppingCart, FaBell,  FaSignOutAlt} from 're
 import {Link, withRouter} from 'react-router-dom';
 //test.css
 import "./userInfomation.css";
-import ModalUI from '../AuthModal/ModalUI';
+import ModalUI from '../Auth/ModalUI';
 //antd
 import {Input,AutoComplete, Avatar} from 'antd'
 import SubNavbar from './SubNavbar';

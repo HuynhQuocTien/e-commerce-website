@@ -20,8 +20,8 @@ export default function Footer() {
                         <article className="article-footer">
                             <h4>HỖ TRỢ KHÁCH HÀNG</h4>
                             <h6>Được đổi, trả trước khi nhận hàng nếu sản phẩm bị lỗi thuộc về Online Shop</h6>
-                            <h6>Chăm sóc khách hàng: 028 3835 4409</h6>
-                            <h6>Email: 3121410497@sv.sgu.edu.vn</h6>
+                            <h6>Chăm sóc khách hàng: +84374691347</h6>
+                            <h6>Email: quoctien01062003@gmail.com</h6>
                         </article>
                     </Col>
                     <Col span={6}>
@@ -69,7 +69,7 @@ export default function Footer() {
                 </Row>
                 <div style={{textAlign: 'center'}}>
                     <br></br>
-                    <h4>Copyright 2024 All rights reserved | made by Online Shop</h4>
+                    <h4>Copyright 2024 All rights reserved | Made By Online Shop</h4>
                     <br></br>
                 </div>
             </div>

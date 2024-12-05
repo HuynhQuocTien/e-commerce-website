@@ -9,7 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace e_commerce_website.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ChatController : ControllerBase
     {

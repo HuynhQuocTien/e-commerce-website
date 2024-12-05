@@ -1,12 +1,13 @@
 import axios from 'axios';
-import * as urlApi from '../api/cogfig.api';
+import * as rootApi from '../api/root.api';
 
 export default function axiosInstance (endpoint, method = 'GET', body){
     
     return axios({
         method: method,
-        url: `${urlApi.API_URL}/${endpoint}`,
+        url: `${rootApi.API_URL}/${endpoint}`,
         data: body,
+        headers: { 'Content-Type': 'application/json' },
     })
     
 }

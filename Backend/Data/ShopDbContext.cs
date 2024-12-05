@@ -20,10 +20,6 @@ namespace e_commerce_website.Data
         public DbSet<Evaluation> evaluations { get; set; }
         public DbSet<Reply> replies { get; set; }
         public DbSet<Chat> chats { get; set; }
-        public static ShopDbContext Create(DbContextOptions<ShopDbContext> options)
-        {
-            return new ShopDbContext(options);
-        }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

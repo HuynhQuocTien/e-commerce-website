@@ -10,7 +10,7 @@ namespace e_commerce_website.Helper.Order
         public string street { get; set; }
         public int feeShip { get; set; }
         //guess
-        public string guess { get; set; }
+        public string? guess { get; set; }
         public string phone { get; set; }
         public string email { get; set; }
 

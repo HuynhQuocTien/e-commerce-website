@@ -25,7 +25,7 @@ namespace e_commerce_website.ViewModel
         public int? categoryId { get; set; }
         public Category category { get; set; }
         //image
-        public virtual ICollection<Image> Images { get; set; }
+        public virtual ICollection<Image>? Images { get; set; }
         //
         public int? providerId { get; set; }
         public Provider provider { get; set; }

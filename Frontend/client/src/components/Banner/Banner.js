@@ -1,36 +1,36 @@
-import React, {Component} from 'react';
-import { Carousel } from 'antd';
-import {MdKeyboardArrowLeft,MdKeyboardArrowRight } from 'react-icons/md';
+import React, { Component } from 'react';
+import {Carousel} from 'antd';
+import banner1 from '../../images/banner/banner1.jpg';
 
-import banner1 from '../../images/banner1.jpg';
-import banner2 from '../../images/banner2.jpg';
-import banner3 from '../../images/banner3.jpg'; 
+import banner3 from '../../images/banner/banner3.jpg';
+import {MdKeyboardArrowLeft, MdKeyboardArrowRight} from 'react-icons/md';
+
 export default class Banner extends Component {
-     constructor(){
-          super();
-          this.next = this.next.bind(this);
-          this.previous = this.previous.bind(this);
-          this.carousel = React.createRef();
+    constructor(){
+        super();
+        this.next = this.next.bind(this);
+        this.previous = this.previous.bind(this);
+        this.carousel = React.createRef();
+    }
+    next(){
+        this.carousel.next();
+    }
+    previous() {
+        this.carousel.prev();
+    }
 
-     }
-     next(){
-          this.carousel.next(); 
-     }
-     previous(){
-          this.carousel.prev();
-     }
-
-     render(){
-          const props ={
-               dots: true,
-               infinite: true,
-               autoplaySpeed: 3000,
-               slidesToShow: 1,
-               slidesToScroll: 1,
-               autoplay: true,
-          }
-          return (
-               <div style={{position: 'relative'}}>
+    render() {
+        const props = {
+            dots: true,
+            infinite: true,
+            autoplaySpeed: 3000,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            autoplay: true
+        };
+        return (
+            
+            <div style={{position: 'relative'}}>
                 
                 <MdKeyboardArrowLeft style={{cursor: 'pointer',fontSize: '2em',color: 'white',position: 'absolute', top: '46%',
                 left: '2%', zIndex: '1'}} onClick={this.previous}></MdKeyboardArrowLeft>
@@ -40,9 +40,7 @@ export default class Banner extends Component {
                         <img src={banner1} width="98%" alt="Banner 1"></img>
                         
                     </div>
-                    <div>
-                        <img src={banner2} width="98%" alt="Banner 2"></img>
-                    </div>
+                    
                     <div>
                         <img src={banner3} width="98%" alt="Banner 3"></img>
                     </div>
@@ -51,6 +49,7 @@ export default class Banner extends Component {
                 
                 <MdKeyboardArrowRight style={{cursor: 'pointer',fontSize: '2em',color: 'white', position: 'absolute', top: '46%',right: '2%', zIndex: '1'}} type="right-circle" onClick={this.next}></MdKeyboardArrowRight>
             </div>
-          )
-     }
+            
+        )
+    }
 }

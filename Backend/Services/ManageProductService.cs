@@ -8,6 +8,7 @@ using e_commerce_website.Helper.Product;
 using e_commerce_website.Models;
 using e_commerce_website.Services.Interfaces;
 using e_commerce_website.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 
@@ -55,8 +56,6 @@ namespace e_commerce_website.Services
         }
         public async Task<int> Update(ProductUpdateRequest request)
         {
-            
-            
             //
             if(request.images != null)
             {
@@ -117,7 +116,7 @@ namespace e_commerce_website.Services
             }
             
             
-
+        
             //
             var product = new Product()
             {
@@ -140,8 +139,10 @@ namespace e_commerce_website.Services
             _context.Entry(product).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return product.id;
-
+        
         }
+
+
         public async Task<int> Delete(int productId)
         {
             var product = await _context.products.FindAsync(productId);
@@ -154,7 +155,6 @@ namespace e_commerce_website.Services
             _context.Entry(product).State = EntityState.Modified;
             return await _context.SaveChangesAsync();
         }
-
         public async Task<List<ProductViewModel>> GetAll()
         {
             var data = _context.products.Include(img => img.Images).Where(x => x.status == ActionStatus.Display)
@@ -180,6 +180,7 @@ namespace e_commerce_website.Services
                     status = rs.status
 
                 });
+            Console.WriteLine(data);
             return await data.ToListAsync();
         }
 

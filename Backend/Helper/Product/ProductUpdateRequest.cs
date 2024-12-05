@@ -17,8 +17,8 @@ namespace e_commerce_website.Helper.Product
         public Color? color { get; set; }
         public int amount { get; set; }
         public int viewCount { get; set; }
-        public IEnumerable<int> images { get; set; }
-        public IEnumerable<IFormFile> files { get; set; }
+        public IEnumerable<int>? images { get; set; }
+        public IEnumerable<IFormFile>? files { get; set; }
         //foreign key
         public int? categoryId { get; set; }
         //

@@ -3,8 +3,8 @@ import {Breadcrumb} from 'antd';
 import { HomeOutlined, UserOutlined, RightOutlined } from '@ant-design/icons';
 
 export default function BreadScrumb({title}) {
-     return (
-          <div style={{background: '#f7f7f7', padding: '.5rem'}}>
+    return (
+        <div style={{background: '#f7f7f7', padding: '.5rem'}}>
             <Breadcrumb separator={<RightOutlined />}>
                 <Breadcrumb.Item href="/" style={{color: '#1890ff'}}>
                 <HomeOutlined />
@@ -16,5 +16,5 @@ export default function BreadScrumb({title}) {
                 </Breadcrumb.Item>
             </Breadcrumb>
         </div>
-     )
-} 
+    )
+}

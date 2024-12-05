@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Row, Col, Form, Input, Button, Spin} from 'antd';
 import FormBuilder from 'antd-form-builder';
 import { UserOutlined} from '@ant-design/icons';
-//modal
+
 export default class ForgetPassword extends Component {
    
     formForget = FormBuilder.createForm(this);

@@ -107,6 +107,60 @@ namespace e_commerce_website.Services
             }).ToListAsync();
 
         }
+        /*public async Task<List<ChatViewModel>> GetMessages(ChatGetMessageRequest request)
+        {
+            // Fetch sender and verify existence
+            var checkSender = await _context.Users.FirstOrDefaultAsync(x => x.Id == request.senderId);
+            if (checkSender == null)
+            {
+                // Handle case when sender is not found
+                return new List<ChatViewModel>(); // or throw an exception if preferred
+            }
+
+            // Retrieve the sender's roles
+            var checkRoleSender = await _userManager.GetRolesAsync(checkSender);
+            if (checkRoleSender.Count == 0)
+            {
+                // Handle case when no role is assigned
+                return new List<ChatViewModel>();
+            }
+
+            var chat = new Chat();
+            var data = _context.chats.AsQueryable();
+
+            // Determine query based on the sender's role
+            if (checkRoleSender[0] == "User")
+            {
+                data = data.Where(x => (x.senderId == request.senderId && x.receiverId == adminId) ||
+                                       (x.senderId == adminId && x.receiverId == request.senderId));
+            }
+            else if (checkRoleSender[0] == "Admin")
+            {
+                if (request.receiverId.HasValue)
+                {
+                    data = data.Where(x => (x.senderId == request.senderId && x.receiverId == request.receiverId.Value) ||
+                                           (x.senderId == request.receiverId.Value && x.receiverId == request.senderId));
+                }
+                else
+                {
+                    // Return an empty list if no receiver ID is provided for Admin role
+                    return new List<ChatViewModel>();
+                }
+            }
+
+            // Return the messages as ChatViewModel list
+            return await data.Select(y => new ChatViewModel
+            {
+                id = y.id,
+                content = y.content,
+                createDate = y.createDate,
+                senderId = y.senderId,
+                sender = y.sender,
+                receiverId = y.receiverId,
+                receiver = y.receiver,
+            }).ToListAsync();
+        }*/
+
 
         public async Task<List<UserViewModel>> GetUserOnlines(List<Guid> userIds)
         {

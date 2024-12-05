@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Row, Col, Form, Input, Button, message} from 'antd';
 import queryString from 'query-string';
 import {Redirect} from 'react-router-dom';
-import axiosInstance from '../../../utils/axiosInstance';
+import axiosInstance from '../../utils/axiosInstance';
 
 
 const formItemLayout = {

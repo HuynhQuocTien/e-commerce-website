@@ -8,9 +8,9 @@
         public int sale { get; set; }
         //foreign key
         public int productId { get; set; }
-        public Product product { get; set; }
+        public Product? product { get; set; }
         //foreign key
         public int orderId { get; set; }
-        public Order order { get; set; }
+        public Order? order { get; set; }
     }
 }

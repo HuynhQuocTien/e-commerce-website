@@ -14,7 +14,7 @@ Dự án Website Bán Hàng là một ứng dụng web cho phépngười dùng t
 ### **1. Server (Back-end): .NET Core**
 
 - **Port**: 5001
-- **Framework**: .NET Core 6.0
+- **Framework**: .NET Core 8.0
 - **Cơ sở dữ liệu**: SQL Server
 - **Các chức năng chính**:
   - Quản lý người dùng (CRUD)
@@ -61,7 +61,7 @@ Dự án Website Bán Hàng là một ứng dụng web cho phépngười dùng t
 
 1. Vào appsetting để sửa lại đường dẫn kết nối (đường dẫn, tên database, ...) : DevConnection.
 
-2. Sử dụng sqlserver 222, tạo database có tên trùng tên databse trên file appsetting.
+2. Sử dụng sqlserver 2022, tạo database có tên trùng tên databse trên file appsetting.
 
 3. Trên database vừa tạo click chuột phải =>Tasks =>Restore =>Database =>Device => Add => chọn database có sẵn => Chọn Ok.
 

@@ -72,7 +72,7 @@ Dự án Website Bán Hàng là một ứng dụng web cho phépngười dùng t
 - **Port**: 3000
 - **Chức năng**: Hiển thị sản phẩm, tìm kiếm, thêm sản phẩm vào giỏ hàng, thanh toán.
 - **Cách chạy**:
-  1. Điều hướng đến thư mục React JS của trang chủ.
+  1. Điều hướng đến thư mục React JS của trang chủ `.e-commerce-website\Frontend\client`
   2. Chạy các lệnh sau:
      ```bash
      npm install
@@ -88,7 +88,7 @@ Dự án Website Bán Hàng là một ứng dụng web cho phépngười dùng t
 - **Chức năng**: Quản lý sản phẩm, người dùng, và đơn hàng.
 - **Cách chạy**:
 
-  1. Điều hướng đến thư mục React JS của trang quản lý.
+  1. Điều hướng đến thư mục React JS của trang quản lý `.\e-commerce-website\Frontend\admin` .
   2. Chạy các lệnh sau:
      ```bash
      npm install

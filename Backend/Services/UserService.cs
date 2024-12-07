@@ -2,10 +2,13 @@
 using e_commerce_website.Enums;
 using e_commerce_website.Helper;
 using e_commerce_website.Helper.Facebook;
+using e_commerce_website.Helper.Github;
+using e_commerce_website.Helper.Google;
 using e_commerce_website.Helper.User;
 using e_commerce_website.Models;
 using e_commerce_website.Services.Interfaces;
 using e_commerce_website.ViewModel;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -195,7 +198,7 @@ namespace e_commerce_website.Services
             if (user != null)
             {
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var passwordResetLink = string.Format("https://localhost:3000/ResetPassword?token={0}&email={1}", token, request.email);
+                var passwordResetLink = string.Format("http://localhost:3000/ResetPassword?token={0}&email={1}", token, request.email);
                 var emailMessage = new MimeMessage();
                 emailMessage.From.Add(new MailboxAddress("Sender Name",_emailConfiguration.From));
                 //var to = new List<MailboxAddress>();
@@ -293,6 +296,129 @@ namespace e_commerce_website.Services
             else
             {
                 return await CreateToken(checkUserExist);
+            }
+        }
+        // public async Task<string> LoginWithGoogle(GoogleLoginRequest request)
+        // {
+        //     var payload = await ValidateGoogleToken(request.tokenId);
+        //     if (payload == null)
+        //     {
+        //         return "FAILED";
+        //     }
+        //
+        //     // Kiểm tra nếu có tài khoản với email đã tồn tại
+        //     var userByEmail = await _userManager.FindByEmailAsync(payload.Email);
+        //
+        //     // Nếu người dùng tồn tại và trạng thái không phải là Deleted, sử dụng tài khoản đó
+        //     if (userByEmail != null)
+        //     {
+        //         if (userByEmail.status == ActionStatus.Deleted)
+        //         {
+        //             return "FAILED";
+        //         }
+        //
+        //         return await CreateToken(userByEmail);
+        //     }
+        //
+        //     // Nếu không tìm thấy email, kiểm tra username dựa trên Google Subject
+        //     var username = payload.Subject + "google";
+        //     var checkUserExist = await _userManager.FindByNameAsync(username);
+        //
+        //     if (checkUserExist != null && checkUserExist.status == ActionStatus.Deleted)
+        //     {
+        //         return "FAILED";
+        //     }
+        //
+        //     // Nếu không tìm thấy tài khoản, tạo mới
+        //     if (checkUserExist == null)
+        //     {
+        //         var user = new AppUser()
+        //         {
+        //             displayname = payload.Name,
+        //             Email = payload.Email,
+        //             avatar = payload.Picture,
+        //             UserName = username,
+        //         };
+        //
+        //         var result = await _userManager.CreateAsync(user, payload.Subject);
+        //         if (result.Succeeded)
+        //         {
+        //             var userRole = _context.Roles.FirstOrDefault(x => x.Name == "User");
+        //             await _userManager.AddToRoleAsync(user, userRole.Name);
+        //             var userTemp = await _userManager.FindByNameAsync(username);
+        //             return await CreateToken(userTemp);
+        //         }
+        //         else
+        //         {
+        //             return "FAILED";
+        //         }
+        //     }
+        //     else
+        //     {
+        //         return await CreateToken(checkUserExist);
+        //     }
+        // }
+
+        public async Task<string> LoginWithGoogle(GoogleLoginRequest request)
+        {
+            var payload = await ValidateGoogleToken(request.tokenId);
+            if (payload == null)
+            {
+                return "FAILED";
+            }
+        
+            var username = payload.Subject + "google";
+            var checkUserExist = await _userManager.FindByNameAsync(username);
+        
+            if (checkUserExist != null && checkUserExist.status == ActionStatus.Deleted)
+            {
+                return "FAILED";
+            }
+        
+            if (checkUserExist == null)
+            {
+                var user = new AppUser()
+                {
+                    displayname = payload.Name,
+                    Email = payload.Email,
+                    avatar = payload.Picture,
+                    UserName = username,
+                };
+        
+                var result = await _userManager.CreateAsync(user, payload.Subject);
+                if (result.Succeeded)
+                {
+                    var userRole = _context.Roles.FirstOrDefault(x => x.Name == "User");
+                    await _userManager.AddToRoleAsync(user, userRole.Name);
+                    var userTemp = await _userManager.FindByNameAsync(username);
+                    return await CreateToken(userTemp);
+                }
+                else
+                {
+                    return "FAILED";
+                }
+            }
+            else
+            {
+                return await CreateToken(checkUserExist);
+            }
+        }
+
+        private async Task<GoogleJsonWebSignature.Payload> ValidateGoogleToken(string token)
+        {
+            try
+            {
+                var settings = new GoogleJsonWebSignature.ValidationSettings()
+                {
+                    Audience = new List<string>() { "124352557332-vfcoofjdmcrmft6n6i6vjsspp61vg5n6.apps.googleusercontent.com" }
+                };
+
+                var payload = await GoogleJsonWebSignature.ValidateAsync(token, settings);
+                return payload;
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
         private async Task<string> CreateToken(AppUser user)

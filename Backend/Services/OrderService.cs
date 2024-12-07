@@ -62,5 +62,17 @@ namespace e_commerce_website.Services
             }).ToListAsync();
             return data;
         }
+
+        public async Task<bool> HasPurchasedProduct(Guid userId, int productId)
+        {
+            // Kiểm tra trong cơ sở dữ liệu nếu tồn tại đơn hàng chứa sản phẩm với UserId và ProductId
+            var hasPurchased = await _context.orderDetails
+                        .AnyAsync(od => _context.orders
+                            .Any(o => o.id == od.orderId && o.userId == userId) && od.productId == productId);
+            
+                    return hasPurchased;
+
+            return hasPurchased;
+        }
     }
 }

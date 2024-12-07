@@ -1,57 +1,70 @@
-import React, { Component } from 'react';
-import { Modal, Input, Button } from 'antd';
-
+import React, { Component } from "react";
+import { Modal, Input, Button, Form } from "antd";
 
 export default class ModalCategory extends Component {
-    handleSubmit(e) {
-        e.preventDefault();
-        const {data} = this.props;
-        this.props.onSubmitForm({id: data.id, name: e.target.name.value, generalityName: e.target.generalityName.value});
-    }
-    handleCancel() {
-        if (this.props.onCancel) {
-            this.props.onCancel(false); // Pass `false` or handle based on your specific requirements
-        }
-    }
-    
-    handleChangeInput(e) {
-        
-        this.props.onChangeInput(e)
-    }
-    render() {
+  handleSubmit = (values) => {
+    const { data } = this.props;
+    this.props.onSubmitForm({ id: data.id, ...values });
+  };
 
-        const { data , visible } = this.props;
-        return (
-            <Modal
+  handleCancel = () => {
+    if (this.props.onCancel) {
+      this.props.onCancel(false); // Pass `false` or handle based on your specific requirements
+    }
+  };
 
-                title={data.id ? "Cập nhập danh mục" : "Thêm danh mục"}
-                visible={visible}
-                
-                // onCancel={this.handleCancel.bind(this)}
-                onCancel={() => this.handleCancel()}
-                footer={null}
+  render() {
+    const { data, visible } = this.props;
+
+    return (
+      <Modal
+        title={data.id ? "Cập nhập danh mục" : "Thêm danh mục"}
+        visible={visible}
+        onCancel={this.handleCancel}
+        footer={null}
+      >
+        <div>
+          <Form
+            onFinish={this.handleSubmit}
+            initialValues={{
+              generalityName: data.generalityName,
+              name: data.name,
+            }}
+          >
+            <Form.Item
+              name="generalityName"
+              label="Tên chung"
+              rules={[
+                { required: true, message: "Tên chung không được để trống" },
+              ]}
             >
-                <div>
-                    <form onSubmit={(e) => this.handleSubmit(e)}>
-                        <Input allowClear size="large" type="text" name="generalityName" onChange={(e) => this.handleChangeInput(e)}
-                            value={data.generalityName} placeholder="Tên chung (Quần áo, ...)"
-                        >
-                        </Input>
-                        <br />
-                        <br />
-                        <Input allowClear size="large" type="text" name="name" onChange={(e) => this.handleChangeInput(e)}
-                            value={data.name} placeholder="Tên chi tiết (Áo sơ mi, Quần Jeans,...)"
-                        >
-                        </Input>
-                        <br />
-                        <br />
-                        <div style={{ textAlign: 'end'}}>
-                            <Button htmlType="submit" type="primary">Submit</Button>
-                        </div>
-                        
-                    </form>
-                </div>
-            </Modal>
-        )
-    }
+              <Input
+                allowClear
+                size="large"
+                placeholder="Tên chung (Quần áo, ...)"
+              />
+            </Form.Item>
+            <Form.Item
+              name="name"
+              label="Tên chi tiết"
+              rules={[
+                { required: true, message: "Tên chi tiết không được để trống" },
+              ]}
+            >
+              <Input
+                allowClear
+                size="large"
+                placeholder="Tên chi tiết (Áo sơ mi, Quần Jeans,...)"
+              />
+            </Form.Item>
+            <div style={{ textAlign: "end" }}>
+              <Button htmlType="submit" type="primary">
+                Submit
+              </Button>
+            </div>
+          </Form>
+        </div>
+      </Modal>
+    );
+  }
 }

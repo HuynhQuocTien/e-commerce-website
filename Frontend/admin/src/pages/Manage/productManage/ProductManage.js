@@ -1,14 +1,31 @@
-import React, { Component } from 'react';
-import Header from '../../../components/common/Header';
-import Sidebar from '../../../components/common/Sidebar';
-import '../../../components/common/styleCommon/Content.css';
-import axiosInstance from '../../../utils/axiosInstance';
-import BreadScrumb from '../../../components/breadScrumb/BreadScrumb';
-import { Table, Tag, Button, Spin, message, Popconfirm, Input, Row, Col, Select } from 'antd';
-import { colors } from '../../../utils/colors';
-import { sizes } from '../../../utils/sizes';
-import { EditOutlined, DeleteOutlined, EyeOutlined, ImportOutlined } from '@ant-design/icons';
-import ModalProduct from '../../../components/product/modalProduct/ModalProduct';
+import React, { Component } from "react";
+import Header from "../../../components/common/Header";
+import Sidebar from "../../../components/common/Sidebar";
+import "../../../components/common/styleCommon/Content.css";
+import axiosInstance from "../../../utils/axiosInstance";
+import BreadScrumb from "../../../components/breadScrumb/BreadScrumb";
+import {
+  Form,
+  Table,
+  Tag,
+  Button,
+  Spin,
+  message,
+  Popconfirm,
+  Input,
+  Row,
+  Col,
+  Select,
+} from "antd";
+import { colors } from "../../../utils/colors";
+import { sizes } from "../../../utils/sizes";
+import {
+  EditOutlined,
+  DeleteOutlined,
+  EyeOutlined,
+  ImportOutlined,
+} from "@ant-design/icons";
+import ModalProduct from "../../../components/product/modalProduct/ModalProduct";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -28,57 +45,50 @@ export default class ProductManage extends Component {
       isLoading: true,
       providerId: 0,
       categoryId: 0,
-    }
+    };
   }
   handleClickBtn(record = null) {
     this.setState({
       visible: true,
-      item: { ...record }
-    })
+      item: { ...record },
+    });
   }
   async componentDidMount() {
-    let providers = await axiosInstance(`ManageProvider`, "GET")
-      .then(res => {
+    let providers = await axiosInstance(`ManageProvider`, "GET").then((res) => {
+      return res.data;
+    });
+    let categories = await axiosInstance(`ManageCategory`, "GET").then(
+      (res) => {
         return res.data;
       }
     );
-    let categories = await axiosInstance(`ManageCategory`, "GET")
-      .then(res => {
-        
-        return res.data;
-      }
-    );
-    let products = await axiosInstance(`ManageProduct`, "GET")
-      .then(res => {
-        return res.data;
-      }
-    );
-    
+    let products = await axiosInstance(`ManageProduct`, "GET").then((res) => {
+      return res.data;
+    });
+
     return this.setState({
       data: products,
       categories: categories,
       providers: providers,
-      isLoading: false
-    }
-    )
-
+      isLoading: false,
+    });
   }
 
   handleOk(value) {
     this.setState({
-      visible: value
-    })
+      visible: value,
+    });
   }
   handleCancel(value) {
     this.setState({
-      visible: value
-    })
+      visible: value,
+    });
   }
   handleSubmit(values) {
     this.setState({
       visible: false,
       isLoading: true,
-    })
+    });
     let data = {
       id: values.id,
       name: values.name,
@@ -90,10 +100,13 @@ export default class ProductManage extends Component {
       providerId: values.providerId,
       size: values.size,
       color: values.color,
-      description: values.description.split('\n').join(';'),
+      description:
+        values.description && values.description.trim() !== ""
+          ? values.description.split("\n").join(";")
+          : "",
       amount: values.amount,
       viewCount: values.viewCount,
-    }
+    };
 
     if (!values.id) {
       const productCreate = new FormData();
@@ -109,16 +122,14 @@ export default class ProductManage extends Component {
       productCreate.set("description", data.description);
       values.images.forEach((element, index) => {
         productCreate.append(`images`, element.originFileObj);
-      })
-      axiosInstance('ManageProduct', 'POST', productCreate)
-        .then(res => {
-          this.setState({
-            data: [...this.state.data, res.data],
-            isLoading: false,
-          })
-        })
-    }
-    else {
+      });
+      axiosInstance("ManageProduct", "POST", productCreate).then((res) => {
+        this.setState({
+          data: [...this.state.data, res.data],
+          isLoading: false,
+        });
+      });
+    } else {
       const productUpdate = new FormData();
       productUpdate.set("id", data.id);
       productUpdate.set("name", data.name);
@@ -139,127 +150,137 @@ export default class ProductManage extends Component {
         if (element.originFileObj) {
           console.log("Has originFileObj:", element.originFileObj);
           console.log("file: ", element);
-          productUpdate.append(`files`, element.originFileObj)// Thêm file
-        }
-        else {
+          productUpdate.append(`files`, element.originFileObj); // Thêm file
+        } else {
           console.log("Has originFileObj:", element.originFileObj);
-          productUpdate.append(`images`, element.uid);// Thêm ID nếu không phải file
-          productUpdate.append(`files`, element.url)
-
+          productUpdate.append(`images`, element.uid); // Thêm ID nếu không phải file
+          productUpdate.append(`files`, element.url);
         }
-      })
+      });
       for (let [key, value] of productUpdate.entries()) {
         console.log(`${key}: ${value}`);
       }
       console.log(productUpdate);
-      axiosInstance('ManageProduct', 'PUT', productUpdate)
-        .then(res => {
+      axiosInstance("ManageProduct", "PUT", productUpdate)
+        .then((res) => {
           return res.data;
-
         })
-        .then(data => {
-          let tempData = [...this.state.data].filter(ele => ele.id !== values.id);
-          let pageDefault = Math.ceil((tempData.length + 1) / this.state.pageSize);
-          message.success(`${data.message}`, 2)
+        .then((data) => {
+          let tempData = [...this.state.data].filter(
+            (ele) => ele.id !== values.id
+          );
+          let pageDefault = Math.ceil(
+            (tempData.length + 1) / this.state.pageSize
+          );
+          message.success(`${data.message}`, 2);
           this.setState({
             isLoading: false,
             visible: false,
             pageDefault: pageDefault,
-            data: [...tempData, data.product]
-          })
+            data: [...tempData, data.product],
+          });
         })
-        .catch(err => console.log(err)
-        )
+        .catch((err) => console.log(err));
     }
   }
   confirmDelete(record) {
     const { data } = this.state;
-    let tempData = [...data].filter(ele => ele.id !== record.id);
+    let tempData = [...data].filter((ele) => ele.id !== record.id);
     this.setState({ isLoading: true });
 
-    axiosInstance(`ManageProduct/${record.id}`, 'DELETE')
-      .then(res => {
-        message.success(`${res.data.message}`, 2)
+    axiosInstance(`ManageProduct/${record.id}`, "DELETE")
+      .then((res) => {
+        message.success(`${res.data.message}`, 2);
         this.setState({
           data: [...tempData],
           isLoading: false,
-        })
+        });
       })
-      .catch(err => {
-        message.warning(`${err.toString()}`, 2)
+      .catch((err) => {
+        message.warning(`${err.toString()}`, 2);
         this.setState({ isLoading: false });
-      })
+      });
   }
-  handleChangeSelectCategory(e){
+  handleChangeSelectCategory(e) {
     this.setState({
-      categoryId: e
-    })
+      categoryId: e,
+    });
   }
-  handleChangeSelectProvider(e){
+  handleChangeSelectProvider(e) {
     this.setState({
-      providerId: e
-    })
+      providerId: e,
+    });
   }
-  async handleSearchInput(value){
-    const {providerId, categoryId} = this.state;
+  async handleSearchInput(value) {
+    const { providerId, categoryId } = this.state;
     this.setState({
       isLoading: true,
+    });
+    let data = await axiosInstance("ManageProduct/search", "POST", {
+      providerId: providerId,
+      categoryId: categoryId,
+      searchKey: value,
     })
-    let data = await axiosInstance('ManageProduct/search', 'POST', {providerId: providerId, categoryId: categoryId, searchKey: value})
-    .then(res => res.data).catch(err => console.log(err));
+      .then((res) => res.data)
+      .catch((err) => console.log(err));
     this.setState({
       data: [...data],
       isLoading: false,
       categoryId: 0,
       providerId: 0,
-    })
+    });
   }
   render() {
-    const { data, visible, item, isLoading, providers, categories } = this.state;
+    const { data, visible, item, isLoading, providers, categories } =
+      this.state;
     const columns = [
       {
-        title: 'Tên sản phẩm',
-        dataIndex: 'name',
-        key: 'name',
-        render: text => <span>{text}</span>,
+        title: "Tên sản phẩm",
+        dataIndex: "name",
+        key: "name",
+        render: (text) => <span>{text}</span>,
       },
       {
-        title: 'Giá nhập ( vnđ )',
-        dataIndex: 'importPrice',
-        key: 'importPrice',
-        render: text => <span >{text}</span>
+        title: "Giá nhập ( vnđ )",
+        dataIndex: "importPrice",
+        key: "importPrice",
+        render: (text) => <span>{text}</span>,
       },
       {
-        title: 'Giá bán ( vnđ )',
-        dataIndex: 'price',
-        key: 'price',
-        render: text => <span style={{ color: 'green' }}>{text}</span>
+        title: "Giá bán ( vnđ )",
+        dataIndex: "price",
+        key: "price",
+        render: (text) => <span style={{ color: "green" }}>{text}</span>,
       },
       {
-        title: 'Màu sắc',
-        key: 'color',
-        dataIndex: 'color',
-        render: color => (
+        title: "Màu sắc",
+        key: "color",
+        dataIndex: "color",
+        render: (color) => (
           <span>
-            {
-              color === 0 ? <Tag color={colors[color]} key={color}>
+            {color === 0 ? (
+              <Tag
+                color={colors[color]}
+                key={color}
+                style={{ backgroundColor: "#f0f0f0", color: "#000" }} // Custom background for white
+              >
                 {"White".toUpperCase()}
-              </Tag> :
-                <Tag color={colors[color]} key={color}>
-                  {colors[color].toUpperCase()}
-                </Tag>
-            }
+              </Tag>
+            ) : (
+              <Tag color={colors[color]} key={color}>
+                {colors[color].toUpperCase()}
+              </Tag>
+            )}
           </span>
         ),
       },
       {
-        title: 'Size',
-        key: 'size',
-        dataIndex: 'size',
-        render: size => (
+        title: "Size",
+        key: "size",
+        dataIndex: "size",
+        render: (size) => (
           <span>
             {
-
               <Tag color="default" key={size}>
                 {sizes[size]}
               </Tag>
@@ -268,106 +289,155 @@ export default class ProductManage extends Component {
         ),
       },
       {
-        title: 'Sale ( % )',
-        dataIndex: 'sale',
-        key: 'sale',
-        render: text => <span style={{ color: 'red' }}>{text}</span>
+        title: "Sale ( % )",
+        dataIndex: "sale",
+        key: "sale",
+        render: (text) => <span style={{ color: "red" }}>{text}</span>,
       },
       {
-        title: 'Nhà cung ứng',
-        dataIndex: 'provider',
-        key: 'provider',
-        render: prov => <span style={{}}>{prov.name}</span>
+        title: "Nhà cung ứng",
+        dataIndex: "provider",
+        key: "provider",
+        render: (prov) => <span style={{}}>{prov.name}</span>,
       },
       {
-        title: (<Button icon={<ImportOutlined />} onClick={() => this.handleClickBtn()} style={{ background: "#389e0d", borderColor: "#389e0d", color: 'white' }}>Add product</Button>),
-        key: 'action',
-        width: '25%',
+        title: (
+          <Button
+            icon={<ImportOutlined />}
+            onClick={() => this.handleClickBtn()}
+            style={{
+              background: "#389e0d",
+              borderColor: "#389e0d",
+              color: "white",
+            }}
+          >
+            Add product
+          </Button>
+        ),
+        key: "action",
+        width: "25%",
         render: (text, record, index) => (
           <span>
-
-            <Button type="primary" icon={<EditOutlined />} style={{ marginRight: 10, marginLeft: 10 }}
-              onClick={() => this.handleClickBtn(record)}>Update</Button>
-            <Popconfirm placement="left" title={warn} onConfirm={() => this.confirmDelete(record)} okText="Yes" cancelText="No">
-              <Button icon={<DeleteOutlined />} type="danger">Delete</Button>
+            <Button
+              type="primary"
+              icon={<EditOutlined />}
+              style={{ marginRight: 10, marginLeft: 10 }}
+              onClick={() => this.handleClickBtn(record)}
+            >
+              Update
+            </Button>
+            <Popconfirm
+              placement="left"
+              title={warn}
+              onConfirm={() => this.confirmDelete(record)}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button icon={<DeleteOutlined />} type="danger">
+                Delete
+              </Button>
             </Popconfirm>
           </span>
         ),
       },
     ];
-    const datas = data.map(ele => {
-      return { key: ele.id, ...ele }
-    })
+    const datas = data.map((ele) => {
+      return { key: ele.id, ...ele };
+    });
     return (
       <>
         <Header></Header>
         <div className="main_container">
           <Sidebar isActive="6"></Sidebar>
           <div className="content">
-
             <BreadScrumb title="Quản lý sản phẩm"></BreadScrumb>
-            {
-              isLoading ? <Spin size="large" tip="Loading data"><>
-                <Table style={{ margin: '10px' }} columns={columns} dataSource={datas}
-                  pagination={{
-                    position: ["bottomCenter", "bottomCenter"],
-                    defaultPageSize: 5
-                  }}
-                >
-                </Table>
-              </>
-              </Spin> : (<>
+            {isLoading ? (
+              <Spin size="large" tip="Loading data">
+                <>
+                  <Table
+                    style={{ margin: "10px" }}
+                    columns={columns}
+                    dataSource={datas}
+                    pagination={{
+                      position: ["bottomCenter", "bottomCenter"],
+                      defaultPageSize: 5,
+                    }}
+                  ></Table>
+                </>
+              </Spin>
+            ) : (
+              <>
                 <div style={{ margin: 10 }}>
                   <Row>
                     <Col offset={5}>
-                      <Select size="large" style={{ width: 150 }} placeholder="Danh mục" onChange={(e) => this.handleChangeSelectCategory(e)} name="categoryId">
-                        {
-                          categories.map(ele => {
-                            return <Option key={ele.id} value={ele.id}>{ele.name}</Option>
-                          })
-                        }
-                        
+                      <Select
+                        size="large"
+                        style={{ width: 150 }}
+                        placeholder="Danh mục"
+                        onChange={(e) => this.handleChangeSelectCategory(e)}
+                        name="categoryId"
+                      >
+                        {categories.map((ele) => {
+                          return (
+                            <Option key={ele.id} value={ele.id}>
+                              {ele.name}
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Col>
                     <Col>
-                      <Select size="large" style={{ width: 200 }} placeholder="Nhà cung cấp" onChange={(e) => this.handleChangeSelectProvider(e)} name="providerId">
-                        {
-                          providers.map(ele => {
-                            return <Option key={ele.id} value={ele.id}>{ele.name}</Option>
-                          })
-                        }
+                      <Select
+                        size="large"
+                        style={{ width: 200 }}
+                        placeholder="Nhà cung cấp"
+                        onChange={(e) => this.handleChangeSelectProvider(e)}
+                        name="providerId"
+                      >
+                        {providers.map((ele) => {
+                          return (
+                            <Option key={ele.id} value={ele.id}>
+                              {ele.name}
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Col>
                     <Col span={8}>
                       <Search
                         placeholder="tìm kiếm..."
                         enterButton="tìm kiếm"
-
                         size="large"
                         onSearch={this.handleSearchInput.bind(this)}
                       />
                     </Col>
                   </Row>
                 </div>
-                <Table style={{ margin: '10px' }} columns={columns} dataSource={datas}
+                <Table
+                  style={{ margin: "10px" }}
+                  columns={columns}
+                  dataSource={datas}
                   pagination={{
                     position: ["bottomCenter", "bottomCenter"],
                     defaultPageSize: this.state.pageSize,
-                    defaultCurrent: this.state.pageDefault
+                    defaultCurrent: this.state.pageDefault,
                   }}
-                >
-                </Table>
-                {
-                  visible ?
-                    <ModalProduct visible={visible} data={item}
-                      onCancel={this.handleCancel.bind(this)} onSubmitForm={this.handleSubmit.bind(this)}></ModalProduct> : ''
-                }
+                ></Table>
+                {visible ? (
+                  <ModalProduct
+                    visible={visible}
+                    data={item}
+                    onCancel={this.handleCancel.bind(this)}
+                    onSubmitForm={this.handleSubmit.bind(this)}
+                  ></ModalProduct>
+                ) : (
+                  ""
+                )}
               </>
-                )
-            }
+            )}
           </div>
         </div>
       </>
-    )
+    );
   }
 }

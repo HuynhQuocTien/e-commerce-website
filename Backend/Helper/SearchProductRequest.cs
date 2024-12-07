@@ -5,7 +5,7 @@ namespace e_commerce_website.Helper
     public class SearchProductRequest
     {
         [FromQuery]
-        public string searchKey { get; set; }
+        public string? searchKey { get; set; }
         [FromQuery]
         public int? categoryId { get; set; }
         [FromQuery]

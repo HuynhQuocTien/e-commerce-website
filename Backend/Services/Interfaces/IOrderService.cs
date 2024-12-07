@@ -7,5 +7,6 @@ namespace e_commerce_website.Services.Interfaces
     {
         Task<int> Create(OrderCreateRequest request);
         Task<List<OrderViewModel>> GetOrderListByUserId(Guid userId);
+        Task<bool> HasPurchasedProduct(Guid userId, int productId);
     }
 }

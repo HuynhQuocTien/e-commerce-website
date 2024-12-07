@@ -1,0 +1,54 @@
+/* Khoảng cách và căn giữa các nút */
+.row-social-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+  gap: 16px; /* Khoảng cách giữa các nút */
+}
+
+.custom-facebook-button,
+.custom-google-button,
+.custom-github-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 160px; /* Đồng nhất chiều rộng */
+  height: 45px; /* Đồng nhất chiều cao */
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none; /* Xóa border mặc định */
+}
+
+/* Facebook button */
+.custom-facebook-button {
+  background-color: #1877f2;
+  color: white;
+}
+
+.custom-facebook-button:hover {
+  background-color: #145dbf;
+}
+
+/* Google button */
+.custom-google-button {
+  background-color: #db4437;
+  color: white;
+}
+
+.custom-google-button:hover {
+  background-color: #c23321;
+}
+
+/* GitHub button */
+.custom-github-button {
+  background-color: #333;
+  color: white;
+}
+
+.custom-github-button:hover {
+  background-color: #24292e;
+}

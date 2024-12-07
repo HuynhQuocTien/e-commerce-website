@@ -9,9 +9,9 @@ namespace e_commerce_website.Helper.Product
         public int price { get; set; }
 
         public int sale { get; set; }
-        public string description { get; set; }
+        public string? description { get; set; } = "";
 
-        public ActionStatus status { get; set; }
+        public ActionStatus status { get; set; } = ActionStatus.Display;
         public Size? size { get; set; }
         public Color? color { get; set; }
         public int amount { get; set; }

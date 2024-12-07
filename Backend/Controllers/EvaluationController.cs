@@ -11,9 +11,11 @@ namespace e_commerce_website.Controllers
     public class EvaluationController : ControllerBase
     {
         private readonly IEvaluationService _evaluationService;
-        public EvaluationController(IEvaluationService evaluationService)
+        private readonly IOrderService _orderService;
+        public EvaluationController(IEvaluationService evaluationService, IOrderService orderService)
         {
             _evaluationService = evaluationService;
+            _orderService = orderService;
         }
         [HttpGet("getEvaluationById")]
         public async Task<IActionResult> getEvaluationById(int evaluationId)
@@ -39,6 +41,15 @@ namespace e_commerce_website.Controllers
             }
             var evaluation = await _evaluationService.getEvaluationById(evaluationId);
             return CreatedAtAction(nameof(getEvaluationById), new { id = evaluationId }, evaluation);
+        }
+        // <summary>
+        /// Kiểm tra nếu người dùng đã mua sản phẩm
+        /// </summary>
+        [HttpGet("check-purchase")]
+        public async Task<IActionResult> CheckPurchase(Guid userId, int productId)
+        {
+            var hasPurchased = await _orderService.HasPurchasedProduct(userId, productId);
+            return Ok(new { hasPurchased });
         }
     }
 }

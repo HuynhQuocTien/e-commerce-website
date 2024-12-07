@@ -1,7 +1,12 @@
 export const colors = {
-    0: 'default', 1: "black", 
-    2: "red", 3: "orange", 
-    4: "yellow", 5: "green", 
-    6: "blue", 7: "gray",
-    8: "purple", 9: "pink"
+  0: "Default (White)",
+  1: "Black",
+  2: "Red",
+  3: "Orange",
+  4: "Yellow",
+  5: "Green",
+  6: "Blue",
+  7: "Gray",
+  8: "Purple",
+  9: "Pink",
 };

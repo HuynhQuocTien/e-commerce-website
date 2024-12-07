@@ -1,4 +1,6 @@
 ﻿using e_commerce_website.Helper.Facebook;
+using e_commerce_website.Helper.Github;
+using e_commerce_website.Helper.Google;
 using e_commerce_website.Helper.User;
 using e_commerce_website.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -86,6 +88,17 @@ namespace e_commerce_website.Controllers
             if (token == "FAILED")
             {
                 return BadRequest("LOGIN FACEBOOK FAILED");
+            }
+            HttpContext.Response.Headers.Add("Token", $"{token}");
+            return Ok(token);
+        }
+        [HttpPost("LoginWithGoogle")]
+        public async Task<IActionResult> LoginWithGoogle(GoogleLoginRequest request)
+        {
+            var token = await _userService.LoginWithGoogle(request);
+            if (token == "FAILED")
+            {
+                return BadRequest("LOGIN GOOGLE FAILED");
             }
             HttpContext.Response.Headers.Add("Token", $"{token}");
             return Ok(token);

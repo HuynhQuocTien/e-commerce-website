@@ -20,7 +20,7 @@ namespace e_commerce_website.Models
         public int price { get; set; }
         [DefaultValue(0)]
         public int sale { get; set; }
-        public string description { get; set; }
+        public string? description { get; set; }
         [DefaultValue(5)]
         public int? rating { get; set; }
 

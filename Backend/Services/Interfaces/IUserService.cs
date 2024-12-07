@@ -1,6 +1,8 @@
 ﻿
 
 using e_commerce_website.Helper.Facebook;
+using e_commerce_website.Helper.Github;
+using e_commerce_website.Helper.Google;
 using e_commerce_website.Helper.User;
 using e_commerce_website.ViewModel;
 
@@ -15,5 +17,6 @@ namespace e_commerce_website.Services.Interfaces
         Task<bool> ForgotPassword(ForgotPasswordRequest request);
         Task<bool> ResetPassword(ResetPasswordRequest request);
         Task<string> LoginWithFacebook(FacebookLoginRequest request);
+        Task<string> LoginWithGoogle(GoogleLoginRequest request);
     }
 }
